@@ -11,16 +11,12 @@ import {
   Square,
   Maximize,
   Minimize,
-  Settings,
-  Wifi,
-  WifiOff,
   RefreshCw,
   Monitor,
   Gauge,
   Signal,
   ChevronDown,
   Loader2,
-  X,
   AlertCircle,
 } from "lucide-react";
 

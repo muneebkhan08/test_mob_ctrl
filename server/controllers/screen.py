@@ -19,9 +19,9 @@ import fractions
 import logging
 import threading
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional
 
 import av
 import mss
@@ -34,6 +34,7 @@ from aiortc import (
     RTCConfiguration,
     RTCIceServer,
 )
+from aiortc.sdp import candidate_from_sdp
 from aiortc.contrib.media import MediaRelay
 
 logger = logging.getLogger("screen_controller")
@@ -213,16 +214,15 @@ class ScreenCaptureTrack(MediaStreamTrack):
     @staticmethod
     def _fast_resize(img: np.ndarray, target_w: int, target_h: int) -> np.ndarray:
         """
-        Resize without OpenCV dependency — uses numpy stride tricks for
-        nearest-neighbor downscaling which is very fast.
+        Resize without OpenCV dependency — uses numpy index mapping for
+        nearest-neighbor scaling (both up and down) which is very fast.
+        Always produces exact target dimensions.
         """
         src_h, src_w = img.shape[:2]
-        # Compute step sizes
-        row_step = max(1, src_h // target_h)
-        col_step = max(1, src_w // target_w)
-        resized = img[::row_step, ::col_step]
-        # Trim to exact dimensions
-        return resized[:target_h, :target_w]
+        # Build index arrays for nearest-neighbor mapping
+        row_indices = (np.arange(target_h) * src_h // target_h).astype(int)
+        col_indices = (np.arange(target_w) * src_w // target_w).astype(int)
+        return img[np.ix_(row_indices, col_indices)]
 
     # ── MediaStreamTrack interface ───────────────────────────────────────
 
@@ -325,14 +325,13 @@ class ScreenController:
         self._connections[conn_id] = pc
         self._tracks[conn_id] = track
 
-        # Configure codec preferences for low latency
-        # H264 Constrained Baseline is fastest to encode/decode
-        sender = pc.addTrack(track)
+        # Add the video track to the peer connection
+        pc.addTrack(track)
 
-        # Set up data channel for stats
-        data_channel = pc.createDataChannel("stats", ordered=False)
+        # Set up data channel for stats & quality control
+        dc = pc.createDataChannel("stats", ordered=False)
 
-        @data_channel.on("message")
+        @dc.on("message")
         def on_message(message):
             try:
                 import json
@@ -386,11 +385,17 @@ class ScreenController:
             return {"error": f"Connection {connection_id} not found"}
 
         try:
-            ice_candidate = RTCIceCandidate(
-                sdpMid=candidate.get("sdpMid"),
-                sdpMLineIndex=candidate.get("sdpMLineIndex"),
-                candidate=candidate.get("candidate", ""),
-            )
+            candidate_sdp = candidate.get("candidate", "")
+            if not candidate_sdp:
+                return {"ok": True}  # Empty candidate = end-of-candidates
+
+            # Strip "candidate:" prefix if present (browser format)
+            if candidate_sdp.startswith("candidate:"):
+                candidate_sdp = candidate_sdp
+            # Parse the SDP candidate string into an RTCIceCandidate object
+            ice_candidate = candidate_from_sdp(candidate_sdp)
+            ice_candidate.sdpMid = candidate.get("sdpMid")
+            ice_candidate.sdpMLineIndex = candidate.get("sdpMLineIndex")
             await pc.addIceCandidate(ice_candidate)
             return {"ok": True}
         except Exception as exc:

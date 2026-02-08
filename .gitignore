@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+venv/
+.env
+
+# Certs (keep meta only)
+server/certs/*.pem
+server/certs/*.key
+
+# Node
+node_modules/
+.next/
+
+# OS
+.DS_Store
+Thumbs.db
