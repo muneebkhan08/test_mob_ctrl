@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import asyncio
 import fractions
+import json
 import logging
 import threading
 import time
@@ -333,7 +334,6 @@ class ScreenController:
         @dc.on("message")
         def on_message(message):
             try:
-                import json
                 msg = json.loads(message)
                 if msg.get("type") == "rtt_report":
                     track.report_rtt(msg.get("rtt", 0))

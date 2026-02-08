@@ -3,7 +3,6 @@
 import subprocess
 import platform
 import os
-import json
 
 
 # Pre-defined common Windows apps with their launch commands
@@ -69,9 +68,11 @@ class AppController:
         if platform.system() == "Windows":
             try:
                 import psutil
+                seen: set[str] = set()
                 for proc in psutil.process_iter(["name", "pid"]):
                     info = proc.info
-                    if info["name"] and info["name"] not in [p["name"] for p in running]:
+                    if info["name"] and info["name"] not in seen:
+                        seen.add(info["name"])
                         running.append({"name": info["name"], "pid": info["pid"]})
             except Exception:
                 pass

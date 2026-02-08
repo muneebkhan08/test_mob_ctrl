@@ -167,12 +167,13 @@ export default function FileBrowser() {
 
   // Reconstruct a navigable path from segments
   const buildPath = (upToIndex: number) => {
+    const sep = currentPath.includes("/") ? "/" : "\\";
     const segments = pathSegments.slice(0, upToIndex + 1);
-    // On Windows, first segment is drive letter like "C:" — needs trailing backslash
+    // On Windows, first segment is drive letter like "C:" — needs trailing separator
     if (segments.length === 1 && segments[0].endsWith(":")) {
-      return segments[0] + "\\";
+      return segments[0] + sep;
     }
-    return segments.join("\\");
+    return segments.join(sep);
   };
 
   return (
