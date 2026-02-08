@@ -51,15 +51,19 @@ export default function ProcessManager() {
   const [showSortMenu, setShowSortMenu] = useState(false);
 
   const refreshTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const searchRef = useRef(search);
+  const sortByRef = useRef(sortBy);
+  searchRef.current = search;
+  sortByRef.current = sortBy;
 
   const fetchProcesses = useCallback(async () => {
     if (disabled) return;
 
     try {
       const data = (await sendAndWait("process_list", {
-        sort_by: sortBy,
+        sort_by: sortByRef.current,
         limit: 100,
-        search,
+        search: searchRef.current,
       })) as {
         processes?: ProcessInfo[];
         total_count?: number;
@@ -74,7 +78,7 @@ export default function ProcessManager() {
     } catch {
       /* ignore */
     }
-  }, [sendAndWait, disabled, sortBy, search]);
+  }, [sendAndWait, disabled]);
 
   // Initial fetch & auto-refresh every 5s
   useEffect(() => {
@@ -87,6 +91,13 @@ export default function ProcessManager() {
       if (refreshTimer.current) clearInterval(refreshTimer.current);
     };
   }, [status, fetchProcesses]);
+
+  // Re-fetch when search or sort changes (debounced by interval)
+  useEffect(() => {
+    if (status === "connected") {
+      fetchProcesses();
+    }
+  }, [search, sortBy]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const killProcess = useCallback(
     async (pid: number, force = false) => {
@@ -237,6 +248,7 @@ export default function ProcessManager() {
         <div className="relative">
           <button
             onClick={() => setShowSortMenu(!showSortMenu)}
+            aria-label="Sort processes"
             className="btn-control h-9 px-2.5 text-[10px] text-surface-400 flex items-center gap-1"
           >
             <ArrowUpDown size={12} />
@@ -310,11 +322,12 @@ export default function ProcessManager() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-1">
                 <button
                   onClick={() => fetchDetail(proc.pid)}
                   title="Details"
-                  className="p-1.5 rounded-lg text-surface-400 hover:text-surface-200 hover:bg-surface-700/50 transition-colors"
+                  aria-label={`Details for ${proc.name}`}
+                  className="p-1.5 rounded-lg text-surface-500 hover:text-surface-200 hover:bg-surface-700/50 transition-colors"
                 >
                   <Info size={13} />
                 </button>
@@ -322,6 +335,7 @@ export default function ProcessManager() {
                   onClick={() => killProcess(proc.pid)}
                   disabled={killing === proc.pid}
                   title="Terminate"
+                  aria-label={`Terminate ${proc.name}`}
                   className="p-1.5 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 transition-colors disabled:opacity-30"
                 >
                   {killing === proc.pid ? (

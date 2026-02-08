@@ -11,12 +11,9 @@ Security:
   • Working directory is tracked per-session
 """
 
-import asyncio
 import os
 import platform
 import subprocess
-import threading
-from typing import Optional
 
 
 # Hard limits

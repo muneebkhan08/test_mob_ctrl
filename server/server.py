@@ -9,7 +9,6 @@ import json
 import logging
 import os
 import socket
-import struct
 import sys
 import threading
 import time
@@ -20,7 +19,6 @@ from pathlib import Path
 import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 
 from controllers.mouse import MouseController

@@ -174,13 +174,13 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         pendingRef.current.set(id, resolve);
         ws.send(JSON.stringify({ action, payload, id }));
 
-        // Timeout after 10 s
+        // Timeout after 35 s (covers terminal commands with 30s default timeout)
         setTimeout(() => {
           if (pendingRef.current.has(id)) {
             pendingRef.current.delete(id);
             resolve(null);
           }
-        }, 10000);
+        }, 35000);
       });
     },
     []

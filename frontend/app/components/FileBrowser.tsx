@@ -165,6 +165,16 @@ export default function FileBrowser() {
     ? currentPath.split(/[/\\]/).filter(Boolean)
     : [];
 
+  // Reconstruct a navigable path from segments
+  const buildPath = (upToIndex: number) => {
+    const segments = pathSegments.slice(0, upToIndex + 1);
+    // On Windows, first segment is drive letter like "C:" — needs trailing backslash
+    if (segments.length === 1 && segments[0].endsWith(":")) {
+      return segments[0] + "\\";
+    }
+    return segments.join("\\");
+  };
+
   return (
     <div className="flex flex-col h-full px-1">
       {/* Header */}
@@ -216,14 +226,13 @@ export default function FileBrowser() {
             </button>
           )}
           {pathSegments.map((seg, i) => {
-            const segPath = pathSegments.slice(0, i + 1).join("\\");
             return (
               <div key={i} className="flex items-center shrink-0">
                 {i > 0 && (
                   <ChevronRight size={10} className="text-surface-600 mx-0.5" />
                 )}
                 <button
-                  onClick={() => navigate(segPath)}
+                  onClick={() => navigate(buildPath(i))}
                   className="text-[10px] text-surface-400 hover:text-accent px-1 py-0.5 rounded transition-colors truncate max-w-[80px]"
                   title={seg}
                 >
@@ -284,9 +293,11 @@ export default function FileBrowser() {
                   key={entry.name}
                   onClick={() => {
                     if (entry.is_dir) {
-                      navigate(currentPath + "\\" + entry.name);
+                      const sep = currentPath.includes("/") ? "/" : "\\";
+                      navigate(currentPath + sep + entry.name);
                     }
                   }}
+                  aria-label={entry.is_dir ? `Open folder ${entry.name}` : entry.name}
                   className={`w-full flex items-center gap-2.5 rounded-lg px-3 py-2 transition-all ${
                     entry.is_dir
                       ? "hover:bg-accent/5 hover:border-accent/20 cursor-pointer"

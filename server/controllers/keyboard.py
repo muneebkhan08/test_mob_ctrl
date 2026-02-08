@@ -68,8 +68,10 @@ class KeyboardController:
     def _type_unicode(text: str):
         """Handle non-ASCII text via clipboard paste."""
         import subprocess
+        # Escape single quotes for PowerShell
+        safe = text.replace("'", "''")
         subprocess.run(
-            ["powershell", "-command", f"Set-Clipboard -Value '{text}'"],
+            ["powershell", "-command", f"Set-Clipboard -Value '{safe}'"],
             capture_output=True,
         )
         pyautogui.hotkey("ctrl", "v")

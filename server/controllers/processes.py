@@ -7,11 +7,6 @@ kill/terminate capabilities by PID.
 Uses psutil for cross-platform process management.
 """
 
-import os
-import platform
-import signal
-from typing import Optional
-
 import psutil
 
 
