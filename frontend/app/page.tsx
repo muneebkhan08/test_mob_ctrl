@@ -62,7 +62,7 @@ function AppInner() {
             </div>
             <div>
               <h1 className="text-xs font-bold tracking-[0.2em] uppercase text-accent text-glow">
-                SPIDER_CRTL
+                SPIDER_CTRL
               </h1>
               <p className="text-[8px] tracking-[0.15em] text-surface-500 uppercase">
                 remote access

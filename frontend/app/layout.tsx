@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NEXUS // Remote Access",
+  title: "SPIDER_CTRL // Remote Access",
   description: "Advanced remote system control interface",
   manifest: "/manifest.json",
   icons: { apple: "/icon-192.png" },
