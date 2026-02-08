@@ -30,7 +30,6 @@ from aiortc import (
     MediaStreamTrack,
     RTCPeerConnection,
     RTCSessionDescription,
-    RTCIceCandidate,
     RTCConfiguration,
     RTCIceServer,
 )
@@ -389,9 +388,6 @@ class ScreenController:
             if not candidate_sdp:
                 return {"ok": True}  # Empty candidate = end-of-candidates
 
-            # Strip "candidate:" prefix if present (browser format)
-            if candidate_sdp.startswith("candidate:"):
-                candidate_sdp = candidate_sdp
             # Parse the SDP candidate string into an RTCIceCandidate object
             ice_candidate = candidate_from_sdp(candidate_sdp)
             ice_candidate.sdpMid = candidate.get("sdpMid")

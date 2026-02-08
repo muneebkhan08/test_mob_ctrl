@@ -13,6 +13,7 @@ Security:
 
 import os
 import platform
+import shutil
 import stat
 import string
 from datetime import datetime
@@ -177,6 +178,5 @@ class FilesystemController:
 
 def _disk_usage(path: str):
     """Cross-platform disk usage (total, used, free) in bytes."""
-    import shutil
     usage = shutil.disk_usage(path)
     return usage.total, usage.used, usage.free

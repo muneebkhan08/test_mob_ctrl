@@ -220,6 +220,8 @@ export default function FileBrowser() {
           {parentPath !== null && (
             <button
               onClick={() => navigate(parentPath)}
+              aria-label="Go to parent directory"
+              title="Back"
               className="p-1 rounded-md text-surface-400 hover:text-accent hover:bg-accent/10 transition-colors shrink-0"
             >
               <ArrowLeft size={14} />

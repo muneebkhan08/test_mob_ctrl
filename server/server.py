@@ -325,7 +325,13 @@ async def websocket_endpoint(ws: WebSocket):
                 resp = {"error": f"Unknown action: {action}"}
             else:
                 try:
-                    result = handler(**payload) if payload else handler()
+                    # Run sync handlers in a thread to avoid blocking
+                    # the event loop (critical for long-running commands
+                    # like terminal_execute or process_list).
+                    if payload:
+                        result = await asyncio.to_thread(handler, **payload)
+                    else:
+                        result = await asyncio.to_thread(handler)
                     resp = {"ok": True, "data": result}
                 except Exception as exc:
                     resp = {"ok": False, "error": str(exc)}

@@ -237,6 +237,8 @@ export default function ProcessManager() {
           {search && (
             <button
               onClick={() => setSearch("")}
+              aria-label="Clear search"
+              title="Clear"
               className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-surface-500 hover:text-surface-300"
             >
               <X size={12} />
@@ -360,6 +362,8 @@ export default function ProcessManager() {
               </h3>
               <button
                 onClick={() => setDetail(null)}
+                aria-label="Close detail panel"
+                title="Close"
                 className="p-1 rounded-lg text-surface-400 hover:text-surface-200 hover:bg-surface-700/50"
               >
                 <X size={16} />
