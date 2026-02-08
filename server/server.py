@@ -1,5 +1,5 @@
 """
-PC Control Server — Main Entry Point
+SPIDER_CTRL Server — Main Entry Point
 Runs a FastAPI WebSocket server + UDP broadcast for auto-discovery.
 Also serves the frontend static files so everything runs from one server.
 """
@@ -43,7 +43,7 @@ logger = logging.getLogger("server")
 SERVER_PORT = 8765
 UDP_PORT = 8766
 BROADCAST_INTERVAL = 2  # seconds
-APP_NAME = "PC Control Server"
+APP_NAME = "SPIDER_CTRL Server"
 PROTOCOL_VERSION = "1.0.0"
 
 
@@ -370,7 +370,7 @@ else:
     @app.get("/")
     async def no_frontend():
         return {
-            "message": "PC Control Server is running. Frontend not found.",
+            "message": "SPIDER_CTRL Server is running. Frontend not found.",
             "hint": "Run: cd frontend && npm run build",
             "websocket": f"ws://{get_local_ip()}:{SERVER_PORT}/ws",
         }

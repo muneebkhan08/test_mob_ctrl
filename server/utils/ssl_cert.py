@@ -52,8 +52,8 @@ def ensure_ssl_certs(local_ip: str) -> tuple[str, str]:
 
     # Build certificate
     subject = issuer = x509.Name([
-        x509.NameAttribute(NameOID.COMMON_NAME, "PC Control Server"),
-        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "PC Control"),
+        x509.NameAttribute(NameOID.COMMON_NAME, "SPIDER_CTRL Server"),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "SPIDER_CTRL"),
     ])
 
     san_entries = [

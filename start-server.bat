@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo   PC Control Server - Starting...
+echo   SPIDER_CTRL Server - Starting...
 echo ========================================
 echo.
 

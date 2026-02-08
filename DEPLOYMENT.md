@@ -1,4 +1,4 @@
-# Deployment Guide — PC Control Remote
+# Deployment Guide — SPIDER_CTRL Remote
 
 Complete step-by-step guide to deploy the frontend on **Vercel** and run the backend server on your PC.
 
@@ -29,7 +29,7 @@ On the **"Configure Project"** page, set the following:
 
 | Setting | Value |
 | --- | --- |
-| **Project Name** | `pc-control-remote` (or any name you prefer) |
+| **Project Name** | `spider-ctrl` (or any name you prefer) |
 | **Framework Preset** | **Next.js** |
 | **Root Directory** | `frontend` ← ⚠️ **Critical — click "Edit" and type `frontend`** |
 | **Build Command** | `next build` (auto-detected, leave default) |
@@ -72,7 +72,7 @@ If you want to set a default server IP:
 Your app is now live at:
 
 ```text
-https://pc-control-remote.vercel.app
+https://spider-ctrl.vercel.app
 ```
 
 (or whatever project name you chose)
@@ -82,7 +82,7 @@ https://pc-control-remote.vercel.app
 ### Step 5 — Verify Deployment
 
 1. Open the Vercel URL on your phone's browser
-2. You should see the PC Control app with:
+2. You should see the SPIDER_CTRL app with:
    - The connection bar at the top
    - Bottom tab navigation (Pad / Keys / Tools / Control)
 3. The app will show "Disconnected" — that's expected until you start the server
@@ -124,7 +124,7 @@ You'll see:
 
 ```text
 ════════════════════════════════════════════════════════
-  🖥️  PC Control Server v1.0.0
+  🖥️  SPIDER_CTRL Server v1.0.0
   🌐  WebSocket  →  ws://192.168.1.42:8765/ws
   📡  UDP Disco   →  port 8766
   💻  Platform    →  Windows 10
@@ -147,8 +147,8 @@ If your phone can't connect, Windows Firewall may be blocking the server:
 Alternatively, run in an elevated PowerShell:
 
 ```powershell
-New-NetFirewallRule -DisplayName "PC Control Server" -Direction Inbound -Protocol TCP -LocalPort 8765 -Action Allow
-New-NetFirewallRule -DisplayName "PC Control Discovery" -Direction Inbound -Protocol UDP -LocalPort 8766 -Action Allow
+New-NetFirewallRule -DisplayName "SPIDER_CTRL Server" -Direction Inbound -Protocol TCP -LocalPort 8765 -Action Allow
+New-NetFirewallRule -DisplayName "SPIDER_CTRL Discovery" -Direction Inbound -Protocol UDP -LocalPort 8766 -Action Allow
 ```
 
 ---
@@ -157,7 +157,7 @@ New-NetFirewallRule -DisplayName "PC Control Discovery" -Direction Inbound -Prot
 
 ### Both on Same Wi-Fi
 
-1. Open `https://pc-control-remote.vercel.app` on your phone
+1. Open `https://spider-ctrl.vercel.app` on your phone
 2. Tap the connection bar → expand it
 3. Enter your PC's IP (e.g., `192.168.1.42`)
 4. Tap **Connect**
@@ -206,7 +206,7 @@ The app will now appear as an icon on your home screen and open in full-screen m
 Quick reference for all Vercel configuration:
 
 ```text
-Project Name:       pc-control-remote
+Project Name:       spider-ctrl
 Framework Preset:   Next.js
 Root Directory:     frontend
 Build Command:      next build         (default)

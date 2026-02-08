@@ -21,7 +21,7 @@ export default function GoogleSearch() {
   // Load recent searches from localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("pc_control_recent");
+      const saved = localStorage.getItem("spider_ctrl_recent");
       if (saved) setRecent(JSON.parse(saved));
     } catch {}
   }, []);
@@ -30,7 +30,7 @@ export default function GoogleSearch() {
     const updated = [item, ...recent.filter((r) => r !== item)].slice(0, 8);
     setRecent(updated);
     try {
-      localStorage.setItem("pc_control_recent", JSON.stringify(updated));
+      localStorage.setItem("spider_ctrl_recent", JSON.stringify(updated));
     } catch {}
   };
 
