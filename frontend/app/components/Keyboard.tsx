@@ -106,8 +106,8 @@ export default function Keyboard() {
       {/* ── Text Input ────────────────────── */}
       <div className="relative">
         <Type
-          size={14}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-500"
+          size={13}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-accent/40"
         />
         <input
           ref={inputRef}
@@ -115,9 +115,9 @@ export default function Keyboard() {
           value={text}
           onChange={handleInput}
           onKeyDown={handleKeyDown}
-          placeholder={disabled ? "Connect to type…" : "Start typing here…"}
+          placeholder={disabled ? "// awaiting link" : "// type here…"}
           disabled={disabled}
-          className="keyboard-input w-full pl-9 pr-20 py-3 rounded-xl text-sm bg-surface-800/80 border border-surface-700/50 placeholder:text-surface-500 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all disabled:opacity-40"
+          className="keyboard-input w-full pl-9 pr-20 py-2.5 rounded-lg text-sm font-mono bg-surface-900/90 border border-surface-700/40 placeholder:text-surface-600 text-surface-200 focus:outline-none focus:border-accent/40 focus:ring-1 focus:ring-accent/15 transition-all disabled:opacity-30"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
@@ -128,29 +128,29 @@ export default function Keyboard() {
             onClick={() => pressKey("backspace")}
             disabled={disabled}
             aria-label="Backspace"
-            className="p-2 rounded-lg text-surface-400 hover:text-surface-200 hover:bg-surface-700/50 transition-all disabled:opacity-30"
+            className="p-1.5 rounded text-surface-500 hover:text-surface-300 hover:bg-surface-700/50 transition-all disabled:opacity-30"
           >
-            <Delete size={16} />
+            <Delete size={14} />
           </button>
           <button
             onClick={() => pressKey("enter")}
             disabled={disabled}
             aria-label="Enter"
-            className="p-2 rounded-lg text-accent hover:bg-accent/10 transition-all disabled:opacity-30"
+            className="p-1.5 rounded text-accent hover:bg-accent/10 transition-all disabled:opacity-30"
           >
-            <CornerDownLeft size={16} />
+            <CornerDownLeft size={14} />
           </button>
         </div>
       </div>
 
       {/* ── Special Keys ──────────────────── */}
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-5 gap-1">
         {SPECIAL_KEYS.map((k) => (
           <button
             key={k.key}
             onClick={() => pressKey(k.key)}
             disabled={disabled}
-            className="btn-control h-10 text-[11px] font-medium text-surface-300 gap-1 disabled:opacity-30"
+            className="btn-control h-9 text-[10px] font-mono font-medium text-surface-400 tracking-wider uppercase gap-1 disabled:opacity-30"
           >
             {k.icon ? <k.icon size={k.iconSize} /> : k.label}
           </button>
@@ -158,53 +158,53 @@ export default function Keyboard() {
       </div>
 
       {/* ── Action Row ────────────────────── */}
-      <div className="grid grid-cols-3 gap-1.5">
+      <div className="grid grid-cols-3 gap-1">
         <button
           onClick={() => pressKey("space")}
           disabled={disabled}
-          className="btn-control h-10 col-span-1 text-[11px] font-medium text-surface-300 gap-1 disabled:opacity-30"
+          className="btn-control h-9 col-span-1 text-[10px] font-mono font-medium text-surface-400 tracking-wider uppercase gap-1 disabled:opacity-30"
         >
-          <Space size={14} /> Space
+          <Space size={13} /> SPC
         </button>
         <button
           onClick={() => pressKey("backspace")}
           disabled={disabled}
-          className="btn-control h-10 text-[11px] font-medium text-surface-300 gap-1 disabled:opacity-30"
+          className="btn-control h-9 text-[10px] font-mono font-medium text-surface-400 tracking-wider uppercase gap-1 disabled:opacity-30"
         >
-          <Delete size={14} /> Backspace
+          <Delete size={13} /> DEL
         </button>
         <button
           onClick={() => pressKey("enter")}
           disabled={disabled}
-          className="btn-control h-10 text-[11px] font-medium text-accent gap-1 disabled:opacity-30"
+          className="btn-control h-9 text-[10px] font-mono font-medium text-accent tracking-wider uppercase gap-1 disabled:opacity-30"
         >
-          <CornerDownLeft size={14} /> Enter
+          <CornerDownLeft size={13} /> RET
         </button>
       </div>
 
       {/* ── Shortcuts Toggle ──────────────── */}
       <button
         onClick={() => setShowShortcuts(!showShortcuts)}
-        className="flex items-center justify-center gap-1.5 py-2 text-[11px] font-medium text-surface-400 hover:text-surface-200 transition-colors"
+        className="flex items-center justify-center gap-1.5 py-1.5 text-[9px] font-mono font-medium text-surface-500 tracking-[0.15em] uppercase hover:text-accent transition-colors"
       >
         <ChevronUp
-          size={12}
+          size={10}
           className={`transition-transform ${showShortcuts ? "rotate-180" : ""}`}
         />
-        Shortcuts
+        MACROS
       </button>
 
       {/* ── Shortcuts Grid ────────────────── */}
       {showShortcuts && (
-        <div className="grid grid-cols-5 gap-1.5 pb-2">
+        <div className="grid grid-cols-5 gap-1 pb-2">
           {SHORTCUTS.map((s) => (
             <button
               key={s.label}
               onClick={() => pressCombo(s.keys)}
               disabled={disabled}
-              className="btn-control h-12 flex-col gap-0.5 text-[9px] font-medium text-surface-400 disabled:opacity-30"
+              className="btn-control h-11 flex-col gap-0.5 text-[8px] font-mono tracking-wider uppercase font-medium text-surface-500 disabled:opacity-30"
             >
-              {s.icon && <s.icon size={12} />}
+              {s.icon && <s.icon size={11} />}
               <span>{s.label}</span>
             </button>
           ))}
@@ -218,7 +218,7 @@ export default function Keyboard() {
             key={`f${i + 1}`}
             onClick={() => pressKey(`f${i + 1}`)}
             disabled={disabled}
-            className="btn-control h-8 text-[10px] font-mono text-surface-500 disabled:opacity-30"
+            className="btn-control h-7 text-[9px] font-mono tracking-wider text-surface-600 disabled:opacity-30"
           >
             F{i + 1}
           </button>

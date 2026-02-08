@@ -81,8 +81,8 @@ export default function AppLauncher() {
   return (
     <div className="px-1 space-y-3">
       <div className="flex items-center gap-2 mb-1">
-        <AppWindow size={16} className="text-surface-400" />
-        <h2 className="text-sm font-semibold text-surface-200">App Launcher</h2>
+        <AppWindow size={14} className="text-accent/50" />
+        <h2 className="text-[11px] font-mono tracking-[0.15em] uppercase text-surface-300">APPS</h2>
       </div>
 
       {/* ── Search ────────────────────────── */}
@@ -95,9 +95,9 @@ export default function AppLauncher() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={disabled ? "Connect first…" : "Search apps…"}
+          placeholder={disabled ? "// awaiting link" : "// search apps"}
           disabled={disabled}
-          className="w-full pl-9 pr-9 py-2.5 rounded-xl text-sm bg-surface-800/80 border border-surface-700/50 placeholder:text-surface-500 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all disabled:opacity-40"
+          className="w-full pl-9 pr-9 py-2 rounded-lg text-[11px] font-mono bg-surface-900/90 border border-surface-700/40 placeholder:text-surface-600 text-surface-200 focus:outline-none focus:border-accent/40 focus:ring-1 focus:ring-accent/15 transition-all disabled:opacity-30"
           autoComplete="off"
         />
         {search && (
@@ -119,7 +119,7 @@ export default function AppLauncher() {
             setSearch("");
           }}
           disabled={disabled}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-accent/10 border border-accent/20 text-sm text-accent font-medium transition-all hover:bg-accent/15 disabled:opacity-30"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-accent/8 border border-accent/15 text-[11px] font-mono tracking-wider text-accent transition-all hover:bg-accent/12 disabled:opacity-30"
         >
           <Terminal size={16} />
           Run &quot;{search}&quot;
@@ -129,10 +129,10 @@ export default function AppLauncher() {
       {/* ── App Grid ──────────────────────── */}
       {loading ? (
         <div className="flex items-center justify-center py-8">
-          <Loader2 size={20} className="animate-spin text-surface-500" />
+          <Loader2 size={18} className="animate-spin text-surface-600" />
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-1.5">
           {filteredApps.map((name) => {
             const Icon = getIcon(name);
             return (
@@ -140,10 +140,10 @@ export default function AppLauncher() {
                 key={name}
                 onClick={() => openApp(name)}
                 disabled={disabled}
-                className="btn-control flex-col gap-1.5 py-3 px-2 h-auto disabled:opacity-30"
+                className="btn-control flex-col gap-1 py-2.5 px-1.5 h-auto disabled:opacity-30"
               >
-                <Icon size={20} className="text-surface-300" />
-                <span className="text-[9px] font-medium text-surface-400 truncate w-full text-center capitalize">
+                <Icon size={18} className="text-surface-400" />
+                <span className="text-[8px] font-mono tracking-wider text-surface-500 truncate w-full text-center uppercase">
                   {name}
                 </span>
               </button>

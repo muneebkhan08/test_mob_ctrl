@@ -59,21 +59,21 @@ export default function ConnectionBar() {
   > = {
     disconnected: {
       color: "text-red-400",
-      bg: "bg-red-500/10 border-red-500/20",
-      icon: <WifiOff size={16} />,
-      label: isDeployed ? "Not Connected" : "Disconnected",
+      bg: "bg-red-500/5 border-red-500/15",
+      icon: <WifiOff size={14} />,
+      label: isDeployed ? "NO LINK" : "OFFLINE",
     },
     connecting: {
-      color: "text-amber-400",
-      bg: "bg-amber-500/10 border-amber-500/20",
-      icon: <Loader2 size={16} className="animate-spin" />,
-      label: "Connecting…",
+      color: "text-yellow-400",
+      bg: "bg-yellow-500/5 border-yellow-500/15",
+      icon: <Loader2 size={14} className="animate-spin" />,
+      label: "LINKING...",
     },
     connected: {
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10 border-emerald-500/20",
-      icon: <Wifi size={16} />,
-      label: "Connected",
+      color: "text-accent",
+      bg: "bg-accent/5 border-accent/15",
+      icon: <Wifi size={14} />,
+      label: "CONNECTED",
     },
   };
 
@@ -83,16 +83,15 @@ export default function ConnectionBar() {
     <div className="w-full">
       {/* ── Status Bar ─────────────────────────── */}
       <div
-        className={`glass flex items-center justify-between px-4 py-2.5 rounded-2xl ${s.bg} border transition-all duration-300`}
+        className={`glass flex items-center justify-between px-3 py-2 rounded-lg ${s.bg} border transition-all duration-300`}
       >
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <div className={`${s.color} transition-colors`}>{s.icon}</div>
           <div>
-            <p className={`text-xs font-semibold ${s.color}`}>{s.label}</p>
+            <p className={`text-[10px] font-semibold tracking-[0.1em] uppercase ${s.color}`}>{s.label}</p>
             {status === "connected" && pcInfo && (
-              <p className="text-[10px] text-surface-400">
-                {(pcInfo as Record<string, string>).hostname} •{" "}
-                {serverIp}
+              <p className="text-[9px] text-surface-500 font-mono">
+                {(pcInfo as Record<string, string>).hostname} :: {serverIp}
               </p>
             )}
           </div>
@@ -102,17 +101,17 @@ export default function ConnectionBar() {
           {status === "connected" ? (
             <button
               onClick={disconnect}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/15 text-red-400 border border-red-500/20 hover:bg-red-500/25 transition-all"
+              className="px-2.5 py-1 rounded text-[10px] font-medium tracking-wider uppercase bg-red-500/10 text-red-400 border border-red-500/15 hover:bg-red-500/20 transition-all"
             >
-              Disconnect
+              DROP
             </button>
           ) : (
             <button
               onClick={() => setExpanded(!expanded)}
-              className="p-1.5 rounded-lg text-surface-400 hover:text-surface-200 transition-colors"
+              className="p-1.5 rounded text-surface-500 hover:text-accent transition-colors"
               aria-label="Toggle connection panel"
             >
-              {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             </button>
           )}
         </div>
@@ -133,16 +132,16 @@ export default function ConnectionBar() {
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <Monitor
-                    size={14}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-500"
+                    size={12}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-600"
                   />
                   <input
                     type="text"
                     value={inputIp}
                     onChange={(e) => setInputIp(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleGo()}
-                    placeholder="PC IP address (e.g. 192.168.1.42)"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl text-sm bg-surface-800/80 border border-surface-700/50 placeholder:text-surface-500 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
+                    placeholder="target ip (e.g. 192.168.1.42)"
+                    className="w-full pl-8 pr-3 py-2 rounded-lg text-xs font-mono bg-surface-900/90 border border-surface-700/40 placeholder:text-surface-600 focus:outline-none focus:border-accent/40 focus:ring-1 focus:ring-accent/10 transition-all text-surface-300"
                     autoComplete="off"
                     autoCorrect="off"
                     inputMode="url"
@@ -151,7 +150,7 @@ export default function ConnectionBar() {
                 <button
                   onClick={handleGo}
                   disabled={!inputIp.trim() || status === "connecting"}
-                  className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-accent text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent-dark active:scale-95 transition-all shadow-glow flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-lg text-[11px] font-bold tracking-[0.1em] uppercase bg-accent/15 text-accent border border-accent/30 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-accent/25 active:scale-95 transition-all shadow-glow-sm flex items-center gap-1.5"
                 >
                   {status === "connecting" ? (
                     <Loader2 size={16} className="animate-spin" />
@@ -168,38 +167,35 @@ export default function ConnectionBar() {
 
               {/* ── Error ── */}
               {lastError && !isDeployed && (
-                <p className="text-xs text-red-400 bg-red-500/5 border border-red-500/10 rounded-lg px-3 py-2">
-                  {lastError}
+                <p className="text-[10px] font-mono text-red-400 bg-red-500/5 border border-red-500/10 rounded px-3 py-2">
+                  [ERR] {lastError}
                 </p>
               )}
 
               {/* ── Deployed: explanation ── */}
               {isDeployed && (
-                <div className="text-xs bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2.5 space-y-1.5">
-                  <p className="text-blue-300 font-semibold">
-                    📲 How it works
+                <div className="text-[10px] font-mono bg-accent/5 border border-accent/10 rounded-lg px-3 py-2.5 space-y-1.5">
+                  <p className="text-accent font-bold tracking-wider uppercase text-[9px]">
+                    // PROTOCOL
                   </p>
-                  <p className="text-blue-200/80 leading-relaxed">
-                    Enter your PC&apos;s IP address and tap <strong>Go</strong>.
-                    You&apos;ll be taken to the app running on your PC server,
-                    where it connects automatically.
+                  <p className="text-surface-400 leading-relaxed">
+                    Enter target IP → tap <span className="text-accent">LINK</span> →
+                    redirect to local server → auto-connect.
                   </p>
-                  <p className="text-blue-200/60 leading-relaxed">
-                    Both your phone and PC must be on the <strong>same Wi-Fi
-                    </strong> network. Find your PC&apos;s IP by running{" "}
-                    <code className="bg-surface-700/50 px-1.5 py-0.5 rounded text-blue-300">
+                  <p className="text-surface-500 leading-relaxed">
+                    Both devices must share the same network. Run{" "}
+                    <code className="bg-surface-800 px-1.5 py-0.5 rounded text-accent/80 border border-surface-700/30">
                       ipconfig
                     </code>{" "}
-                    on your PC.
+                    on target machine.
                   </p>
                 </div>
               )}
 
               {/* ── Local: help text ── */}
               {!isDeployed && (
-                <p className="text-[10px] text-surface-500 leading-relaxed">
-                  Run the server on your PC, then enter its IP address above. Both
-                  devices must be on the same Wi-Fi / hotspot network.
+                <p className="text-[9px] text-surface-600 leading-relaxed font-mono">
+                  // start server on target → enter IP → same network required
                 </p>
               )}
             </div>

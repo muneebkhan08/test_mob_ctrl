@@ -2,14 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap");
 
 :root {
-  --color-accent: #6366f1;
-  --color-accent-light: #818cf8;
-  --color-bg: #0f172a;
-  --color-surface: #1e293b;
-  --color-surface-light: #334155;
+  --color-accent: #00ffc8;
+  --color-accent-light: #5cffe0;
+  --color-accent-rgb: 0, 255, 200;
+  --color-bg: #0a0e12;
+  --color-surface: #10151b;
+  --color-surface-light: #1a2028;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -27,30 +28,58 @@ body {
   padding: 0;
   height: 100%;
   overflow: hidden;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "JetBrains Mono", "Share Tech Mono", "Fira Code", monospace;
   background: var(--color-bg);
-  color: #e2e8f0;
+  color: #9ba8b0;
   touch-action: manipulation;
+  letter-spacing: 0.02em;
+}
+
+/* ── Noise texture overlay ───────────────── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.4);
+  background: rgba(0, 255, 200, 0.15);
   border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 200, 0.3);
 }
 
 /* ── Touchpad ────────────────────────────── */
 .touchpad-area {
   touch-action: none;
+  background: 
+    linear-gradient(rgba(0, 255, 200, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 200, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: relative;
+}
+
+.touchpad-area::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
   background: radial-gradient(
     ellipse at center,
-    rgba(99, 102, 241, 0.03) 0%,
+    rgba(0, 255, 200, 0.04) 0%,
     transparent 70%
   );
 }
@@ -63,39 +92,68 @@ body {
   border-radius: inherit;
   background: linear-gradient(
     180deg,
-    rgba(99, 102, 241, 0.02) 0%,
-    transparent 50%
+    rgba(0, 255, 200, 0.02) 0%,
+    transparent 40%
   );
 }
 
 /* ── Glass Card ──────────────────────────── */
 .glass {
-  background: rgba(30, 41, 59, 0.6);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(16, 21, 27, 0.85);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 255, 200, 0.06);
 }
 
 /* ── Button base ─────────────────────────── */
 .btn-control {
-  @apply flex items-center justify-center rounded-xl transition-all duration-150;
-  @apply active:scale-95 active:brightness-110;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(148, 163, 184, 0.08);
+  @apply flex items-center justify-center rounded-lg transition-all duration-150;
+  @apply active:scale-95;
+  background: rgba(16, 21, 27, 0.9);
+  border: 1px solid rgba(0, 255, 200, 0.08);
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.03em;
 }
 
 .btn-control:hover {
-  border-color: rgba(148, 163, 184, 0.15);
+  border-color: rgba(0, 255, 200, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 200, 0.05);
+}
+
+.btn-control:active {
+  background: rgba(0, 255, 200, 0.05);
+}
+
+/* ── Scan line animation ─────────────────── */
+@keyframes scanline {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+
+.scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 200, 0.08), transparent);
+  animation: scanline 6s linear infinite;
+  pointer-events: none;
 }
 
 /* ── Pulse animation ─────────────────────── */
 @keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 200, 0.3);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0);
+    box-shadow: 0 0 0 8px rgba(0, 255, 200, 0);
   }
 }
 
@@ -111,6 +169,7 @@ body {
 /* ── Keyboard input ──────────────────────── */
 .keyboard-input {
   caret-color: var(--color-accent);
+  font-family: "JetBrains Mono", monospace;
 }
 
 /* ── Volume slider ───────────────────────── */
@@ -122,20 +181,21 @@ input[type="range"] {
 }
 
 input[type="range"]::-webkit-slider-track {
-  height: 6px;
-  background: rgba(148, 163, 184, 0.15);
+  height: 4px;
+  background: rgba(0, 255, 200, 0.08);
   border-radius: 100px;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  height: 22px;
-  width: 22px;
+  height: 18px;
+  width: 18px;
   border-radius: 50%;
   background: var(--color-accent);
-  margin-top: -8px;
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  margin-top: -7px;
+  box-shadow: 0 0 12px rgba(0, 255, 200, 0.4), 0 0 4px rgba(0, 255, 200, 0.6);
+  border: 2px solid rgba(10, 14, 18, 0.8);
 }
 
 /* ── Haptic ripple ───────────────────────── */
@@ -151,7 +211,7 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(0, 255, 200, 0.2);
   transform: scale(0);
   animation: ripple 0.5s ease-out forwards;
   pointer-events: none;
@@ -159,17 +219,42 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* ── Status indicator ────────────────────── */
 @keyframes breathe {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 1;
+    box-shadow: 0 0 4px rgba(0, 255, 200, 0.6);
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.5;
+    box-shadow: 0 0 8px rgba(0, 255, 200, 0.3);
   }
 }
 
 .status-connected {
-  animation: breathe 3s ease-in-out infinite;
+  animation: breathe 2s ease-in-out infinite;
+}
+
+/* ── Hacker glow text ────────────────────── */
+.text-glow {
+  text-shadow: 0 0 8px rgba(0, 255, 200, 0.4), 0 0 20px rgba(0, 255, 200, 0.1);
+}
+
+.text-glow-danger {
+  text-shadow: 0 0 8px rgba(255, 51, 85, 0.4), 0 0 20px rgba(255, 51, 85, 0.1);
+}
+
+/* ── Border glow ─────────────────────────── */
+.border-glow {
+  box-shadow: 0 0 8px rgba(0, 255, 200, 0.08), inset 0 0 8px rgba(0, 255, 200, 0.03);
+}
+
+/* ── Terminal cursor blink ───────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
 }
 
 /* ── Screen Viewer ───────────────────────── */
@@ -179,7 +264,6 @@ video {
   will-change: contents;
 }
 
-/* Fullscreen video container */
 :fullscreen {
   background: #000;
 }
@@ -188,4 +272,11 @@ video {
   width: 100vw;
   height: 100vh;
   object-fit: contain;
+}
+
+/* ── Hex grid pattern for backgrounds ────── */
+.hex-pattern {
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 200, 0.03) 0%, transparent 50%);
+  background-size: 30px 30px;
 }

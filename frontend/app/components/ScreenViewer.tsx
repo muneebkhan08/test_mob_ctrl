@@ -38,23 +38,23 @@ const QUALITY_OPTIONS: {
 function StatsBadge({ stats }: { stats: StreamStats }) {
   const latencyColor =
     stats.latency < 50
-      ? "text-emerald-400"
+      ? "text-accent"
       : stats.latency < 100
       ? "text-yellow-400"
-      : "text-red-400";
+      : "text-danger";
 
   return (
-    <div className="flex items-center gap-3 text-[10px] font-mono">
+    <div className="flex items-center gap-3 text-[9px] font-mono tracking-wider">
       <span className={`flex items-center gap-1 ${latencyColor}`}>
-        <Signal size={10} />
+        <Signal size={9} />
         {stats.latency}ms
       </span>
-      <span className="text-surface-400">
+      <span className="text-surface-500">
         {stats.fps > 0 ? `${stats.fps}fps` : "—"}
       </span>
-      <span className="text-surface-400">{stats.resolution}</span>
+      <span className="text-surface-500">{stats.resolution}</span>
       {stats.bitrate > 0 && (
-        <span className="text-surface-400">
+        <span className="text-surface-500">
           {stats.bitrate > 1000
             ? `${(stats.bitrate / 1000).toFixed(1)}Mbps`
             : `${stats.bitrate}kbps`}
@@ -186,7 +186,7 @@ export default function ScreenViewer() {
       onClick={isStreaming ? resetControlsTimer : undefined}
     >
       {/* ── Video area ─────────────────────────── */}
-      <div className="relative flex-1 flex items-center justify-center min-h-0 rounded-2xl overflow-hidden bg-surface-900/80 border border-surface-700/30">
+      <div className="relative flex-1 flex items-center justify-center min-h-0 rounded-lg overflow-hidden bg-surface-950 border border-surface-700/30 scan-line">
         {/* Video element (always mounted) */}
         <video
           ref={videoRef as React.LegacyRef<HTMLVideoElement>}
@@ -201,28 +201,28 @@ export default function ScreenViewer() {
         {/* ── Idle state ──────────────────────── */}
         {streamStatus === "idle" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center">
-              <Monitor size={28} className="text-accent" />
+            <div className="w-14 h-14 rounded-lg bg-accent/8 border border-accent/15 flex items-center justify-center">
+              <Monitor size={24} className="text-accent" />
             </div>
             <div className="text-center space-y-1">
-              <p className="text-sm font-medium text-surface-200">
-                Screen Stream
+              <p className="text-[11px] font-mono font-medium tracking-[0.15em] uppercase text-surface-300">
+                SCREEN STREAM
               </p>
-              <p className="text-xs text-surface-400">
-                View your PC screen in real-time
+              <p className="text-[10px] font-mono text-surface-600">
+                // real-time display feed
               </p>
             </div>
 
             {/* Quality selector */}
-            <div className="flex gap-1.5 mt-2">
+            <div className="flex gap-1 mt-2">
               {QUALITY_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => setSelectedQuality(opt.value)}
-                  className={`px-3 py-1.5 rounded-lg text-[10px] font-medium transition-all ${
+                  className={`px-2.5 py-1 rounded text-[9px] font-mono tracking-wider uppercase transition-all ${
                     selectedQuality === opt.value
-                      ? "bg-accent/15 text-accent border border-accent/30"
-                      : "bg-surface-800 text-surface-400 border border-surface-700/30 hover:text-surface-300"
+                      ? "bg-accent/12 text-accent border border-accent/25 text-glow"
+                      : "bg-surface-900 text-surface-500 border border-surface-700/30 hover:text-surface-400"
                   }`}
                 >
                   {opt.label}
@@ -233,44 +233,44 @@ export default function ScreenViewer() {
             {/* Start button */}
             <button
               onClick={handleStart}
-              className="mt-2 flex items-center gap-2 px-6 py-2.5 rounded-xl bg-accent hover:bg-accent-dark text-white text-sm font-medium transition-all active:scale-95"
+              className="mt-2 flex items-center gap-2 px-6 py-2 rounded-lg bg-accent/15 border border-accent/30 hover:bg-accent/25 text-accent text-[11px] font-mono tracking-[0.15em] uppercase font-medium transition-all active:scale-95 shadow-glow-sm"
             >
-              <Play size={16} fill="currentColor" />
-              Start Stream
+              <Play size={14} fill="currentColor" />
+              INIT_STREAM
             </button>
           </div>
         )}
 
         {/* ── Connecting state ────────────────── */}
         {isConnecting && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface-900/80">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface-950/90">
             <Loader2
-              size={32}
+              size={28}
               className="text-accent animate-spin"
             />
-            <p className="text-sm text-surface-300">
+            <p className="text-[11px] font-mono tracking-wider uppercase text-surface-400">
               {streamStatus === "reconnecting"
-                ? "Reconnecting…"
-                : "Connecting…"}
+                ? "RECONNECTING…"
+                : "ESTABLISHING…"}
             </p>
           </div>
         )}
 
         {/* ── Error state ─────────────────────── */}
         {streamStatus === "error" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface-900/80">
-            <div className="w-12 h-12 rounded-xl bg-danger/10 flex items-center justify-center">
-              <AlertCircle size={24} className="text-danger" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface-950/90">
+            <div className="w-11 h-11 rounded-lg bg-danger/10 border border-danger/20 flex items-center justify-center">
+              <AlertCircle size={20} className="text-danger" />
             </div>
-            <p className="text-sm text-surface-300 text-center px-4">
-              {streamError || "Stream failed"}
+            <p className="text-[11px] font-mono text-surface-400 text-center px-4">
+              {streamError || "[ERR] stream failed"}
             </p>
             <button
               onClick={handleRetry}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-800 border border-surface-700/30 text-sm text-surface-200 hover:text-white transition-all active:scale-95"
+              className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-surface-900 border border-surface-700/40 text-[11px] font-mono tracking-wider uppercase text-surface-300 hover:text-accent hover:border-accent/30 transition-all active:scale-95"
             >
-              <RefreshCw size={14} />
-              Retry
+              <RefreshCw size={12} />
+              RETRY
             </button>
           </div>
         )}
@@ -287,7 +287,7 @@ export default function ScreenViewer() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                  <span className="text-[10px] text-white/70 font-medium">
+                  <span className="text-[9px] text-white/60 font-mono tracking-wider uppercase">
                     LIVE
                   </span>
                 </div>
@@ -306,9 +306,9 @@ export default function ScreenViewer() {
                 <button
                   onClick={handleStop}
                   title="Stop stream"
-                  className="p-2 rounded-lg bg-danger/20 text-danger hover:bg-danger/30 transition-all active:scale-95"
+                  className="p-2 rounded-lg bg-danger/20 border border-danger/30 text-danger hover:bg-danger/30 transition-all active:scale-95"
                 >
-                  <Square size={16} fill="currentColor" />
+                  <Square size={14} fill="currentColor" />
                 </button>
 
                 {/* Quality + Settings */}
@@ -317,7 +317,7 @@ export default function ScreenViewer() {
                   <div className="relative">
                     <button
                       onClick={() => setShowSettings(!showSettings)}
-                      className="flex items-center gap-1 px-2 py-1.5 rounded-lg bg-white/10 text-white/80 text-[10px] font-medium transition-all hover:bg-white/20"
+                      className="flex items-center gap-1 px-2 py-1 rounded bg-white/10 text-white/70 text-[9px] font-mono tracking-wider uppercase transition-all hover:bg-white/20"
                     >
                       <Gauge size={12} />
                       {streamStats.quality.toUpperCase()}
@@ -326,19 +326,19 @@ export default function ScreenViewer() {
 
                     {/* Quality dropdown */}
                     {showSettings && (
-                      <div className="absolute bottom-full right-0 mb-2 w-40 rounded-xl bg-surface-800/95 backdrop-blur border border-surface-700/50 shadow-xl overflow-hidden z-10">
+                      <div className="absolute bottom-full right-0 mb-2 w-36 rounded-lg bg-surface-900/95 backdrop-blur border border-surface-700/50 shadow-xl overflow-hidden z-10">
                         {QUALITY_OPTIONS.map((opt) => (
                           <button
                             key={opt.value}
                             onClick={() => handleQualityChange(opt.value)}
-                            className={`w-full text-left px-3 py-2.5 text-xs transition-all ${
+                            className={`w-full text-left px-3 py-2 text-[10px] font-mono tracking-wider transition-all ${
                               streamStats.quality === opt.value
-                                ? "bg-accent/15 text-accent"
-                                : "text-surface-300 hover:bg-surface-700/50"
+                                ? "bg-accent/12 text-accent"
+                                : "text-surface-400 hover:bg-surface-700/50"
                             }`}
                           >
-                            <div className="font-medium">{opt.label}</div>
-                            <div className="text-[9px] text-surface-500 mt-0.5">
+                            <div className="uppercase">{opt.label}</div>
+                            <div className="text-[8px] text-surface-600 mt-0.5">
                               {opt.desc}
                             </div>
                           </button>
@@ -351,7 +351,7 @@ export default function ScreenViewer() {
                   <button
                     onClick={toggleFullscreen}
                     title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-                    className="p-2 rounded-lg bg-white/10 text-white/80 hover:bg-white/20 transition-all active:scale-95"
+                    className="p-2 rounded-lg bg-white/10 text-white/70 hover:bg-white/20 transition-all active:scale-95"
                   >
                     {isFullscreen ? (
                       <Minimize size={16} />

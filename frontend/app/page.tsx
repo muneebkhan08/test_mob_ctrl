@@ -20,6 +20,8 @@ import {
   LayoutGrid,
   Zap,
   Monitor,
+  Terminal,
+  Shield,
 } from "lucide-react";
 
 // ── Tab definitions ─────────────────────────────────────────────────────────
@@ -32,11 +34,11 @@ interface Tab {
 }
 
 const TABS: Tab[] = [
-  { id: "touchpad", label: "Pad", icon: MousePointer2 },
-  { id: "keyboard", label: "Keys", icon: KeyboardIcon },
-  { id: "screen", label: "Screen", icon: Monitor },
-  { id: "tools", label: "Tools", icon: LayoutGrid },
-  { id: "controls", label: "Control", icon: Zap },
+  { id: "touchpad", label: "PAD", icon: MousePointer2 },
+  { id: "keyboard", label: "KEYS", icon: KeyboardIcon },
+  { id: "screen", label: "STRM", icon: Monitor },
+  { id: "tools", label: "TOOLS", icon: Terminal },
+  { id: "controls", label: "SYS", icon: Zap },
 ];
 
 // ── Sub-tabs for Tools page ─────────────────────────────────────────────────
@@ -54,19 +56,24 @@ function AppInner() {
       <header className="shrink-0 px-4 pt-4 pb-2 space-y-3">
         {/* Brand */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-accent/15 border border-accent/20 flex items-center justify-center">
-              <MousePointer2 size={14} className="text-accent" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded border border-accent/30 bg-accent/5 flex items-center justify-center shadow-glow-sm">
+              <Shield size={13} className="text-accent" />
             </div>
-            <h1 className="text-sm font-bold tracking-tight text-surface-100">
-              PC Control
-            </h1>
+            <div>
+              <h1 className="text-xs font-bold tracking-[0.2em] uppercase text-accent text-glow">
+                NEXUS
+              </h1>
+              <p className="text-[8px] tracking-[0.15em] text-surface-500 uppercase">
+                remote access
+              </p>
+            </div>
           </div>
           {status === "connected" && (
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 status-connected" />
-              <span className="text-[10px] text-emerald-400 font-medium">
-                LIVE
+            <div className="flex items-center gap-1.5 bg-accent/5 border border-accent/15 rounded px-2 py-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent status-connected" />
+              <span className="text-[9px] text-accent font-medium tracking-[0.15em] uppercase">
+                linked
               </span>
             </div>
           )}
@@ -87,24 +94,24 @@ function AppInner() {
         {activeTab === "tools" && (
           <div className="space-y-3 h-full flex flex-col">
             {/* Sub-tab bar */}
-            <div className="flex gap-1 p-1 rounded-xl bg-surface-800/80 border border-surface-700/30 shrink-0 overflow-x-auto">
+            <div className="flex gap-0.5 p-0.5 rounded-lg bg-surface-900/90 border border-surface-700/30 shrink-0 overflow-x-auto">
               {(
                 [
-                  { id: "search" as ToolsSubTab, label: "Search" },
-                  { id: "apps" as ToolsSubTab, label: "Apps" },
-                  { id: "media" as ToolsSubTab, label: "Media" },
-                  { id: "terminal" as ToolsSubTab, label: "Shell" },
-                  { id: "processes" as ToolsSubTab, label: "Tasks" },
-                  { id: "files" as ToolsSubTab, label: "Files" },
+                  { id: "search" as ToolsSubTab, label: "SRCH" },
+                  { id: "apps" as ToolsSubTab, label: "APPS" },
+                  { id: "media" as ToolsSubTab, label: "MEDIA" },
+                  { id: "terminal" as ToolsSubTab, label: "SHELL" },
+                  { id: "processes" as ToolsSubTab, label: "PROC" },
+                  { id: "files" as ToolsSubTab, label: "FS" },
                 ] as const
               ).map((t) => (
                 <button
                   key={t.id}
                   onClick={() => setToolsSubTab(t.id)}
-                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap px-2 ${
+                  className={`flex-1 py-1.5 rounded text-[10px] font-medium transition-all whitespace-nowrap px-1.5 tracking-wider ${
                     toolsSubTab === t.id
-                      ? "bg-accent/15 text-accent border border-accent/20"
-                      : "text-surface-400 border border-transparent"
+                      ? "bg-accent/10 text-accent border border-accent/20 text-glow"
+                      : "text-surface-500 border border-transparent hover:text-surface-300"
                   }`}
                 >
                   {t.label}
@@ -127,30 +134,30 @@ function AppInner() {
       </main>
 
       {/* ── Bottom Tab Bar ────────────────── */}
-      <nav className="tab-bar shrink-0 px-4 pb-2 pt-1">
-        <div className="flex items-center justify-around rounded-2xl bg-surface-800/90 border border-surface-700/30 backdrop-blur-lg py-1">
+      <nav className="tab-bar shrink-0 px-3 pb-2 pt-1">
+        <div className="flex items-center justify-around rounded-lg bg-surface-900/95 border border-surface-700/40 backdrop-blur-lg py-0.5">
           {TABS.map((tab) => {
             const active = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex flex-col items-center gap-0.5 py-2 px-4 rounded-xl transition-all ${
+                className={`flex flex-col items-center gap-0.5 py-2 px-3 rounded-lg transition-all ${
                   active
                     ? "text-accent"
-                    : "text-surface-500 hover:text-surface-300"
+                    : "text-surface-600 hover:text-surface-400"
                 }`}
               >
                 <div
-                  className={`p-1.5 rounded-lg transition-all ${
-                    active ? "bg-accent/10" : ""
+                  className={`p-1.5 rounded transition-all ${
+                    active ? "bg-accent/8 shadow-glow-sm" : ""
                   }`}
                 >
-                  <tab.icon size={18} strokeWidth={active ? 2.5 : 1.5} />
+                  <tab.icon size={16} strokeWidth={active ? 2.5 : 1.5} />
                 </div>
                 <span
-                  className={`text-[9px] font-semibold tracking-wide ${
-                    active ? "text-accent" : ""
+                  className={`text-[8px] font-semibold tracking-[0.15em] ${
+                    active ? "text-accent text-glow" : ""
                   }`}
                 >
                   {tab.label}

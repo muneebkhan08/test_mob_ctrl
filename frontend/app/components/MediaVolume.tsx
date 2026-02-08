@@ -58,8 +58,8 @@ export default function MediaVolume() {
       {/* ── Volume Section ────────────────── */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Volume2 size={16} className="text-surface-400" />
-          <h2 className="text-sm font-semibold text-surface-200">Volume</h2>
+          <Volume2 size={14} className="text-accent/50" />
+          <h2 className="text-[11px] font-mono tracking-[0.15em] uppercase text-surface-300">VOL</h2>
         </div>
 
         {/* Volume Display */}
@@ -71,16 +71,16 @@ export default function MediaVolume() {
                 cy="50"
                 r="42"
                 fill="none"
-                stroke="rgba(148,163,184,0.1)"
-                strokeWidth="6"
+                stroke="rgba(148,163,184,0.06)"
+                strokeWidth="5"
               />
               <circle
                 cx="50"
                 cy="50"
                 r="42"
                 fill="none"
-                stroke={muted ? "#ef4444" : "#6366f1"}
-                strokeWidth="6"
+                stroke={muted ? "#ff3355" : "#00ffc8"}
+                strokeWidth="5"
                 strokeLinecap="round"
                 strokeDasharray={`${volume * 2.64} 264`}
                 className="transition-all duration-200"
@@ -93,10 +93,10 @@ export default function MediaVolume() {
               className="flex flex-col items-center gap-1 disabled:opacity-30"
             >
               <VolumeIcon
-                size={24}
-                className={muted ? "text-red-400" : "text-accent-light"}
+                size={22}
+                className={muted ? "text-danger" : "text-accent"}
               />
-              <span className="text-lg font-bold text-surface-200">
+              <span className="text-base font-mono font-bold text-surface-200 tracking-wider">
                 {muted ? "MUTE" : `${volume}%`}
               </span>
             </button>
@@ -109,9 +109,9 @@ export default function MediaVolume() {
             onClick={() => handleVolumeChange(volume - 5)}
             disabled={disabled}
             aria-label="Volume down"
-            className="btn-control w-10 h-10 text-surface-400 disabled:opacity-30"
+            className="btn-control w-9 h-9 text-surface-500 disabled:opacity-30"
           >
-            <Minus size={16} />
+            <Minus size={14} />
           </button>
           <input
             type="range"
@@ -127,23 +127,23 @@ export default function MediaVolume() {
             onClick={() => handleVolumeChange(volume + 5)}
             disabled={disabled}
             aria-label="Volume up"
-            className="btn-control w-10 h-10 text-surface-400 disabled:opacity-30"
+            className="btn-control w-9 h-9 text-surface-500 disabled:opacity-30"
           >
-            <Plus size={16} />
+            <Plus size={14} />
           </button>
         </div>
 
         {/* Quick Volume Presets */}
-        <div className="grid grid-cols-5 gap-1.5">
+        <div className="grid grid-cols-5 gap-1">
           {[0, 25, 50, 75, 100].map((level) => (
             <button
               key={level}
               onClick={() => handleVolumeChange(level)}
               disabled={disabled}
-              className={`btn-control h-9 text-[11px] font-medium disabled:opacity-30 ${
+              className={`btn-control h-8 text-[10px] font-mono tracking-wider disabled:opacity-30 ${
                 volume === level
-                  ? "text-accent border-accent/30 bg-accent/10"
-                  : "text-surface-400"
+                  ? "text-accent border-accent/25 bg-accent/8 text-glow"
+                  : "text-surface-500"
               }`}
             >
               {level}%
@@ -155,9 +155,9 @@ export default function MediaVolume() {
       {/* ── Media Controls ────────────────── */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Music size={16} className="text-surface-400" />
-          <h2 className="text-sm font-semibold text-surface-200">
-            Media Controls
+          <Music size={14} className="text-accent/50" />
+          <h2 className="text-[11px] font-mono tracking-[0.15em] uppercase text-surface-300">
+            MEDIA
           </h2>
         </div>
 
@@ -166,9 +166,9 @@ export default function MediaVolume() {
             onClick={() => send("media_prev")}
             disabled={disabled}
             aria-label="Previous track"
-            className="btn-control w-14 h-14 text-surface-300 disabled:opacity-30"
+            className="btn-control w-12 h-12 text-surface-400 disabled:opacity-30"
           >
-            <SkipBack size={22} />
+            <SkipBack size={20} />
           </button>
 
           <button
@@ -178,18 +178,18 @@ export default function MediaVolume() {
             }}
             disabled={disabled}
             aria-label={isPlaying ? "Pause" : "Play"}
-            className="btn-control w-16 h-16 text-accent bg-accent/10 border-accent/20 disabled:opacity-30"
+            className="btn-control w-14 h-14 text-accent bg-accent/8 border-accent/15 disabled:opacity-30"
           >
-            {isPlaying ? <Pause size={26} /> : <Play size={26} className="ml-1" />}
+            {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
           </button>
 
           <button
             onClick={() => send("media_next")}
             disabled={disabled}
             aria-label="Next track"
-            className="btn-control w-14 h-14 text-surface-300 disabled:opacity-30"
+            className="btn-control w-12 h-12 text-surface-400 disabled:opacity-30"
           >
-            <SkipForward size={22} />
+            <SkipForward size={20} />
           </button>
         </div>
 
@@ -200,7 +200,7 @@ export default function MediaVolume() {
               setIsPlaying(false);
             }}
             disabled={disabled}
-            className="btn-control px-6 h-10 text-xs font-medium text-surface-400 gap-1.5 disabled:opacity-30"
+            className="btn-control px-5 h-9 text-[10px] font-mono tracking-wider uppercase text-surface-500 gap-1.5 disabled:opacity-30"
           >
             <Square size={13} /> Stop
           </button>

@@ -181,9 +181,9 @@ export default function FileBrowser() {
       {/* Header */}
       <div className="flex items-center justify-between mb-2 shrink-0">
         <div className="flex items-center gap-2">
-          <Folder size={16} className="text-surface-400" />
-          <h2 className="text-sm font-semibold text-surface-200">Files</h2>
-          <span className="text-[10px] text-surface-500 bg-surface-800/60 px-1.5 py-0.5 rounded">
+          <Folder size={14} className="text-accent/50" />
+          <h2 className="text-[11px] font-mono tracking-[0.15em] uppercase text-surface-300">FS</h2>
+          <span className="text-[9px] text-surface-600 bg-surface-900/80 px-1.5 py-0.5 rounded font-mono">
             {fileCount}
           </span>
         </div>
@@ -192,25 +192,25 @@ export default function FileBrowser() {
             onClick={fetchDrives}
             disabled={disabled}
             title="Drives"
-            className="btn-control w-8 h-8 text-surface-400 disabled:opacity-30"
+            className="btn-control w-7 h-7 text-surface-500 disabled:opacity-30"
           >
-            <HardDrive size={14} />
+            <HardDrive size={12} />
           </button>
           <button
             onClick={() => navigate()}
             disabled={disabled}
             title="Home"
-            className="btn-control w-8 h-8 text-surface-400 disabled:opacity-30"
+            className="btn-control w-7 h-7 text-surface-500 disabled:opacity-30"
           >
-            <Home size={14} />
+            <Home size={12} />
           </button>
           <button
             onClick={() => navigate(currentPath)}
             disabled={disabled}
             title="Refresh"
-            className="btn-control w-8 h-8 text-surface-400 disabled:opacity-30"
+            className="btn-control w-7 h-7 text-surface-500 disabled:opacity-30"
           >
-            <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+            <RefreshCw size={12} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
       </div>
@@ -223,7 +223,7 @@ export default function FileBrowser() {
               onClick={() => navigate(parentPath)}
               aria-label="Go to parent directory"
               title="Back"
-              className="p-1 rounded-md text-surface-400 hover:text-accent hover:bg-accent/10 transition-colors shrink-0"
+              className="p-1 rounded text-surface-500 hover:text-accent hover:bg-accent/8 transition-colors shrink-0"
             >
               <ArrowLeft size={14} />
             </button>
@@ -236,7 +236,7 @@ export default function FileBrowser() {
                 )}
                 <button
                   onClick={() => navigate(buildPath(i))}
-                  className="text-[10px] text-surface-400 hover:text-accent px-1 py-0.5 rounded transition-colors truncate max-w-[80px]"
+                  className="text-[9px] text-surface-500 font-mono hover:text-accent px-1 py-0.5 rounded transition-colors truncate max-w-[80px]"
                   title={seg}
                 >
                   {seg}
@@ -250,21 +250,21 @@ export default function FileBrowser() {
       {/* Drives view */}
       {showDrives && (
         <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
-          <p className="text-xs text-surface-400 mb-2">Select a drive:</p>
+          <p className="text-[10px] font-mono text-surface-500 mb-2 tracking-wider">// select drive:</p>
           {drives.map((drive) => (
             <button
               key={drive.path}
               onClick={() => navigate(drive.path)}
-              className="w-full flex items-center gap-3 bg-surface-800/50 border border-surface-700/20 rounded-lg px-3 py-3 hover:border-accent/30 hover:bg-accent/5 transition-all"
+              className="w-full flex items-center gap-3 bg-surface-900/60 border border-surface-700/20 rounded-lg px-3 py-2.5 hover:border-accent/25 hover:bg-accent/5 transition-all"
             >
-              <HardDrive size={20} className="text-accent shrink-0" />
+              <HardDrive size={18} className="text-accent/70 shrink-0" />
               <div className="text-left">
-                <div className="text-sm font-medium text-surface-200">
+                <div className="text-[11px] font-mono font-medium text-surface-300">
                   {drive.label}
                 </div>
                 {drive.total_gb !== undefined && (
-                  <div className="text-[10px] text-surface-500">
-                    {drive.free_gb}GB free / {drive.total_gb}GB total
+                  <div className="text-[9px] text-surface-600 font-mono">
+                    {drive.free_gb}G free / {drive.total_gb}G
                   </div>
                 )}
               </div>
@@ -301,38 +301,38 @@ export default function FileBrowser() {
                     }
                   }}
                   aria-label={entry.is_dir ? `Open folder ${entry.name}` : entry.name}
-                  className={`w-full flex items-center gap-2.5 rounded-lg px-3 py-2 transition-all ${
+                  className={`w-full flex items-center gap-2 rounded px-2.5 py-1.5 transition-all ${
                     entry.is_dir
                       ? "hover:bg-accent/5 hover:border-accent/20 cursor-pointer"
                       : "cursor-default"
-                  } bg-surface-800/30 border border-surface-700/15`}
+                  } bg-surface-900/40 border border-surface-700/15`}
                 >
                   <IconComponent
-                    size={16}
+                    size={14}
                     className={`shrink-0 ${
                       entry.is_dir
-                        ? "text-accent-light"
+                        ? "text-accent/60"
                         : entry.is_symlink
                         ? "text-yellow-400"
-                        : "text-surface-400"
+                        : "text-surface-500"
                     }`}
                   />
                   <div className="flex-1 min-w-0 text-left">
                     <span
-                      className={`text-xs truncate block ${
+                      className={`text-[11px] font-mono truncate block ${
                         entry.is_dir
-                          ? "font-medium text-surface-200"
-                          : "text-surface-300"
+                          ? "font-medium text-surface-300"
+                          : "text-surface-400"
                       }`}
                     >
                       {entry.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-[10px] text-surface-500 w-16 text-right">
+                    <span className="text-[9px] text-surface-600 w-16 text-right font-mono">
                       {entry.is_dir ? "" : formatSize(entry.size)}
                     </span>
-                    <span className="text-[10px] text-surface-600 w-20 text-right hidden sm:block">
+                    <span className="text-[9px] text-surface-600 w-20 text-right hidden sm:block font-mono">
                       {formatDate(entry.modified)}
                     </span>
                   </div>
