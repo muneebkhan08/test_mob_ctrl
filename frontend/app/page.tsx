@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { WebSocketProvider, useWebSocket } from "./hooks/useWebSocket";
+import { WebRTCProvider } from "./hooks/useWebRTC";
 import ConnectionBar from "./components/ConnectionBar";
 import Touchpad from "./components/Touchpad";
 import Keyboard from "./components/Keyboard";
@@ -9,15 +10,17 @@ import PowerControls from "./components/PowerControls";
 import AppLauncher from "./components/AppLauncher";
 import GoogleSearch from "./components/GoogleSearch";
 import MediaVolume from "./components/MediaVolume";
+import ScreenViewer from "./components/ScreenViewer";
 import {
   MousePointer2,
   Keyboard as KeyboardIcon,
   LayoutGrid,
   Zap,
+  Monitor,
 } from "lucide-react";
 
 // ── Tab definitions ─────────────────────────────────────────────────────────
-type TabId = "touchpad" | "keyboard" | "tools" | "controls";
+type TabId = "touchpad" | "keyboard" | "tools" | "screen" | "controls";
 
 interface Tab {
   id: TabId;
@@ -28,6 +31,7 @@ interface Tab {
 const TABS: Tab[] = [
   { id: "touchpad", label: "Pad", icon: MousePointer2 },
   { id: "keyboard", label: "Keys", icon: KeyboardIcon },
+  { id: "screen", label: "Screen", icon: Monitor },
   { id: "tools", label: "Tools", icon: LayoutGrid },
   { id: "controls", label: "Control", icon: Zap },
 ];
@@ -74,6 +78,8 @@ function AppInner() {
         {activeTab === "touchpad" && <Touchpad />}
 
         {activeTab === "keyboard" && <Keyboard />}
+
+        {activeTab === "screen" && <ScreenViewer />}
 
         {activeTab === "tools" && (
           <div className="space-y-3 h-full flex flex-col">
@@ -153,7 +159,9 @@ function AppInner() {
 export default function Home() {
   return (
     <WebSocketProvider>
-      <AppInner />
+      <WebRTCProvider>
+        <AppInner />
+      </WebRTCProvider>
     </WebSocketProvider>
   );
 }

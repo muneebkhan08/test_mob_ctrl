@@ -6,6 +6,7 @@ Also serves the frontend static files so everything runs from one server.
 
 import asyncio
 import json
+import logging
 import os
 import socket
 import struct
@@ -17,10 +18,10 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from controllers.mouse import MouseController
 from controllers.keyboard import KeyboardController
@@ -31,7 +32,12 @@ from controllers.volume import VolumeController
 from controllers.media import MediaController
 from controllers.clipboard import ClipboardController
 from controllers.system_info import SystemInfoController
+from controllers.screen import ScreenController
 from utils.network import get_local_ip
+
+# Configure logging for WebRTC
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("server")
 
 # ── Constants ────────────────────────────────────────────────────────────────
 SERVER_PORT = 8765
@@ -51,6 +57,7 @@ volume = VolumeController()
 media = MediaController()
 clipboard = ClipboardController()
 system_info = SystemInfoController()
+screen = ScreenController()
 
 # ── Route Dispatch Table ─────────────────────────────────────────────────────
 HANDLERS = {
@@ -142,10 +149,13 @@ async def lifespan(app: FastAPI):
     else:
         print(f"  ⚠️  Frontend not built — run: cd frontend && npm run build")
     print(f"  🔌  WebSocket  →  ws://{local_ip}:{SERVER_PORT}/ws")
+    print(f"  �  WebRTC     →  /webrtc/offer")
     print(f"  📡  UDP Disco   →  port {UDP_PORT}")
     print(f"  💻  Platform    →  {platform.system()} {platform.release()}")
     print("═" * 56 + "\n")
     yield
+    # Shutdown: clean up all WebRTC connections
+    await screen.cleanup_all()
 
 
 app = FastAPI(title=APP_NAME, version=PROTOCOL_VERSION, lifespan=lifespan)
@@ -166,7 +176,108 @@ async def health():
         "port": SERVER_PORT,
         "hostname": socket.gethostname(),
         "platform": platform.system(),
+        "webrtc": True,
+        "active_streams": screen.active_connections,
     }
+
+
+# ── WebRTC Signaling Endpoints ───────────────────────────────────────────────
+
+@app.post("/webrtc/offer")
+async def webrtc_offer(request: Request):
+    """Receive SDP offer from client, return SDP answer."""
+    try:
+        body = await request.json()
+        sdp = body.get("sdp")
+        sdp_type = body.get("type", "offer")
+        quality = body.get("quality", "medium")
+
+        if not sdp:
+            return JSONResponse(
+                {"error": "Missing 'sdp' in request body"},
+                status_code=400,
+            )
+
+        result = await screen.create_offer(
+            sdp=sdp, sdp_type=sdp_type, quality=quality
+        )
+        return JSONResponse(result)
+
+    except Exception as exc:
+        logger.error(f"WebRTC offer error: {exc}")
+        return JSONResponse(
+            {"error": str(exc)},
+            status_code=500,
+        )
+
+
+@app.post("/webrtc/ice")
+async def webrtc_ice(request: Request):
+    """Receive trickle ICE candidate."""
+    try:
+        body = await request.json()
+        connection_id = body.get("connection_id")
+        candidate = body.get("candidate")
+
+        if not connection_id or not candidate:
+            return JSONResponse(
+                {"error": "Missing 'connection_id' or 'candidate'"},
+                status_code=400,
+            )
+
+        result = await screen.add_ice_candidate(connection_id, candidate)
+        return JSONResponse(result)
+
+    except Exception as exc:
+        return JSONResponse({"error": str(exc)}, status_code=500)
+
+
+@app.post("/webrtc/quality")
+async def webrtc_quality(request: Request):
+    """Change stream quality for a connection."""
+    try:
+        body = await request.json()
+        connection_id = body.get("connection_id")
+        quality = body.get("quality", "medium")
+
+        if not connection_id:
+            return JSONResponse(
+                {"error": "Missing 'connection_id'"},
+                status_code=400,
+            )
+
+        result = await screen.change_quality(connection_id, quality)
+        return JSONResponse(result)
+
+    except Exception as exc:
+        return JSONResponse({"error": str(exc)}, status_code=500)
+
+
+@app.post("/webrtc/stop")
+async def webrtc_stop(request: Request):
+    """Stop a specific stream."""
+    try:
+        body = await request.json()
+        connection_id = body.get("connection_id")
+
+        if not connection_id:
+            return JSONResponse(
+                {"error": "Missing 'connection_id'"},
+                status_code=400,
+            )
+
+        result = await screen.stop_stream(connection_id)
+        return JSONResponse(result)
+
+    except Exception as exc:
+        return JSONResponse({"error": str(exc)}, status_code=500)
+
+
+@app.get("/webrtc/stats/{connection_id}")
+async def webrtc_stats(connection_id: str):
+    """Get stream statistics."""
+    result = await screen.get_stats(connection_id)
+    return JSONResponse(result)
 
 
 # ── Static Frontend Serving ──────────────────────────────────────────────────

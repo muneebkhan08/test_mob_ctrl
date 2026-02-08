@@ -171,3 +171,21 @@ input[type="range"]::-webkit-slider-thumb {
 .status-connected {
   animation: breathe 3s ease-in-out infinite;
 }
+
+/* ── Screen Viewer ───────────────────────── */
+video {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: contents;
+}
+
+/* Fullscreen video container */
+:fullscreen {
+  background: #000;
+}
+
+:fullscreen video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+}
