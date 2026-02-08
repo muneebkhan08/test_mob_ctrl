@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --color-accent: #6366f1;
+  --color-accent-light: #818cf8;
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-light: #334155;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--color-bg);
+  color: #e2e8f0;
+  touch-action: manipulation;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.4);
+  border-radius: 100px;
+}
+
+/* ── Touchpad ────────────────────────────── */
+.touchpad-area {
+  touch-action: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(99, 102, 241, 0.03) 0%,
+    transparent 70%
+  );
+}
+
+.touchpad-area::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(99, 102, 241, 0.02) 0%,
+    transparent 50%
+  );
+}
+
+/* ── Glass Card ──────────────────────────── */
+.glass {
+  background: rgba(30, 41, 59, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* ── Button base ─────────────────────────── */
+.btn-control {
+  @apply flex items-center justify-center rounded-xl transition-all duration-150;
+  @apply active:scale-95 active:brightness-110;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.btn-control:hover {
+  border-color: rgba(148, 163, 184, 0.15);
+}
+
+/* ── Pulse animation ─────────────────────── */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Tab bar ─────────────────────────────── */
+.tab-bar {
+  padding-bottom: var(--safe-bottom);
+}
+
+/* ── Keyboard input ──────────────────────── */
+.keyboard-input {
+  caret-color: var(--color-accent);
+}
+
+/* ── Volume slider ───────────────────────── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+  height: 6px;
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 100px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  margin-top: -8px;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+}
+
+/* ── Haptic ripple ───────────────────────── */
+@keyframes ripple {
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background: rgba(99, 102, 241, 0.3);
+  transform: scale(0);
+  animation: ripple 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ── Status indicator ────────────────────── */
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.status-connected {
+  animation: breathe 3s ease-in-out infinite;
+}
