@@ -107,27 +107,27 @@ export default function Touchpad() {
     <div className="flex flex-col h-full">
       {/* ── Touchpad Area ─────────────────── */}
       <div
-        className="touchpad-area relative flex-1 rounded-2xl border border-surface-700/30 mx-1 flex items-center justify-center select-none overflow-hidden"
+        className="touchpad-area scan-line relative flex-1 rounded-lg border border-surface-700/40 mx-1 flex items-center justify-center select-none overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
       >
         {disabled ? (
-          <p className="text-surface-500 text-sm">Connect to start</p>
+          <p className="text-surface-600 text-[11px] font-mono tracking-wider">// AWAITING LINK</p>
         ) : (
           <div className="flex flex-col items-center gap-2 text-surface-600 pointer-events-none">
-            <MousePointer2 size={28} strokeWidth={1.5} />
-            <p className="text-xs font-medium tracking-wide">TRACKPAD</p>
-            <div className="flex items-center gap-3 text-[10px] text-surface-500 mt-1">
+            <MousePointer2 size={24} strokeWidth={1} className="text-accent/30" />
+            <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-surface-500">TRACKPAD</p>
+            <div className="flex items-center gap-3 text-[9px] text-surface-600 mt-1 font-mono">
               <span className="flex items-center gap-1">
-                <Hand size={10} /> 1-tap = click
+                <Hand size={9} /> 1x=click
               </span>
               <span className="flex items-center gap-1">
-                <Hand size={10} /> 2-tap = right
+                <Hand size={9} /> 2x=right
               </span>
               <span className="flex items-center gap-1">
-                <ArrowUpDown size={10} /> 2-drag = scroll
+                <ArrowUpDown size={9} /> 2d=scroll
               </span>
             </div>
           </div>
@@ -135,11 +135,11 @@ export default function Touchpad() {
 
         {/* Finger indicator */}
         {activeFingers > 0 && (
-          <div className="absolute top-3 right-3 flex items-center gap-1 bg-accent/10 border border-accent/20 rounded-full px-2 py-0.5">
+          <div className="absolute top-2 right-2 flex items-center gap-1 bg-accent/8 border border-accent/15 rounded px-1.5 py-0.5">
             {[...Array(activeFingers)].map((_, i) => (
               <div
                 key={i}
-                className="w-1.5 h-1.5 rounded-full bg-accent"
+                className="w-1 h-1 rounded-full bg-accent shadow-glow-sm"
               />
             ))}
           </div>
@@ -147,16 +147,16 @@ export default function Touchpad() {
       </div>
 
       {/* ── Click Buttons ─────────────────── */}
-      <div className="flex gap-2 px-1 pt-2">
+      <div className="flex gap-1.5 px-1 pt-2">
         <button
           onTouchStart={(e) => {
             e.stopPropagation();
             if (!disabled) send("mouse_click", { button: "left" });
           }}
           disabled={disabled}
-          className="btn-control flex-1 h-12 text-xs font-medium text-surface-400 disabled:opacity-30"
+          className="btn-control flex-1 h-11 text-[10px] font-medium text-surface-500 tracking-wider uppercase disabled:opacity-30"
         >
-          Left Click
+          L_CLICK
         </button>
         <button
           onTouchStart={(e) => {
@@ -165,9 +165,9 @@ export default function Touchpad() {
           }}
           disabled={disabled}
           aria-label="Middle click"
-          className="btn-control w-14 h-12 text-xs text-surface-500 disabled:opacity-30"
+          className="btn-control w-12 h-11 text-surface-500 disabled:opacity-30"
         >
-          <ArrowUpDown size={14} />
+          <ArrowUpDown size={13} />
         </button>
         <button
           onTouchStart={(e) => {
@@ -175,9 +175,9 @@ export default function Touchpad() {
             if (!disabled) send("mouse_right_click");
           }}
           disabled={disabled}
-          className="btn-control flex-1 h-12 text-xs font-medium text-surface-400 disabled:opacity-30"
+          className="btn-control flex-1 h-11 text-[10px] font-medium text-surface-500 tracking-wider uppercase disabled:opacity-30"
         >
-          Right Click
+          R_CLICK
         </button>
       </div>
     </div>

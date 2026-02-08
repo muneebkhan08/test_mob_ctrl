@@ -146,11 +146,11 @@ export default function ProcessManager() {
       {/* Header */}
       <div className="flex items-center justify-between mb-2 shrink-0">
         <div className="flex items-center gap-2">
-          <Activity size={16} className="text-surface-400" />
-          <h2 className="text-sm font-semibold text-surface-200">
-            Processes
+          <Activity size={14} className="text-accent/50" />
+          <h2 className="text-[11px] font-mono tracking-[0.15em] uppercase text-surface-300">
+            PROC
           </h2>
-          <span className="text-[10px] text-surface-500 bg-surface-800/60 px-1.5 py-0.5 rounded">
+          <span className="text-[9px] text-surface-600 bg-surface-900/80 px-1.5 py-0.5 rounded font-mono">
             {totalCount}
           </span>
         </div>
@@ -161,54 +161,54 @@ export default function ProcessManager() {
           }}
           disabled={disabled}
           title="Refresh"
-          className="btn-control w-8 h-8 text-surface-400 disabled:opacity-30"
+          className="btn-control w-7 h-7 text-surface-500 disabled:opacity-30"
         >
-          <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+          <RefreshCw size={12} className={loading ? "animate-spin" : ""} />
         </button>
       </div>
 
       {/* System Stats */}
       {system && (
-        <div className="grid grid-cols-2 gap-2 mb-3 shrink-0">
-          <div className="bg-surface-800/60 border border-surface-700/30 rounded-lg px-3 py-2">
+        <div className="grid grid-cols-2 gap-1.5 mb-3 shrink-0">
+          <div className="bg-surface-900/80 border border-surface-700/25 rounded-lg px-2.5 py-2">
             <div className="flex items-center gap-1.5 mb-1">
-              <Cpu size={12} className="text-blue-400" />
-              <span className="text-[10px] text-surface-400 font-medium">
+              <Cpu size={10} className="text-accent" />
+              <span className="text-[9px] text-surface-500 font-mono tracking-wider uppercase">
                 CPU
               </span>
             </div>
             <div className="flex items-baseline gap-1">
-              <span className="text-sm font-bold text-surface-200">
+              <span className="text-[12px] font-mono font-bold text-surface-200">
                 {system.cpu_percent}%
               </span>
-              <span className="text-[10px] text-surface-500">
-                {system.cpu_count} cores
+              <span className="text-[9px] text-surface-600 font-mono">
+                {system.cpu_count}c
               </span>
             </div>
-            <div className="w-full h-1 bg-surface-700/40 rounded-full mt-1">
+            <div className="w-full h-0.5 bg-surface-700/30 rounded-full mt-1">
               <div
-                className="h-full bg-blue-400 rounded-full transition-all"
+                className="h-full bg-accent rounded-full transition-all"
                 style={{ width: `${Math.min(system.cpu_percent, 100)}%` }}
               />
             </div>
           </div>
 
-          <div className="bg-surface-800/60 border border-surface-700/30 rounded-lg px-3 py-2">
+          <div className="bg-surface-900/80 border border-surface-700/25 rounded-lg px-2.5 py-2">
             <div className="flex items-center gap-1.5 mb-1">
-              <HardDrive size={12} className="text-purple-400" />
-              <span className="text-[10px] text-surface-400 font-medium">
+              <HardDrive size={10} className="text-purple-400" />
+              <span className="text-[9px] text-surface-500 font-mono tracking-wider uppercase">
                 RAM
               </span>
             </div>
             <div className="flex items-baseline gap-1">
-              <span className="text-sm font-bold text-surface-200">
+              <span className="text-[12px] font-mono font-bold text-surface-200">
                 {system.memory_percent}%
               </span>
-              <span className="text-[10px] text-surface-500">
-                {system.memory_used_gb}/{system.memory_total_gb}GB
+              <span className="text-[9px] text-surface-600 font-mono">
+                {system.memory_used_gb}/{system.memory_total_gb}G
               </span>
             </div>
-            <div className="w-full h-1 bg-surface-700/40 rounded-full mt-1">
+            <div className="w-full h-0.5 bg-surface-700/30 rounded-full mt-1">
               <div
                 className="h-full bg-purple-400 rounded-full transition-all"
                 style={{ width: `${Math.min(system.memory_percent, 100)}%` }}
@@ -229,9 +229,9 @@ export default function ProcessManager() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Filter processes…"
+            placeholder="filter…"
             disabled={disabled}
-            className="w-full pl-9 pr-9 py-2 rounded-xl text-xs bg-surface-800/80 border border-surface-700/50 placeholder:text-surface-500 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all disabled:opacity-40"
+            className="w-full pl-9 pr-9 py-1.5 rounded-lg text-[10px] font-mono bg-surface-900/80 border border-surface-700/40 placeholder:text-surface-600 text-surface-200 focus:outline-none focus:border-accent/40 focus:ring-1 focus:ring-accent/15 transition-all disabled:opacity-30"
             autoComplete="off"
           />
           {search && (
@@ -251,14 +251,14 @@ export default function ProcessManager() {
           <button
             onClick={() => setShowSortMenu(!showSortMenu)}
             aria-label="Sort processes"
-            className="btn-control h-9 px-2.5 text-[10px] text-surface-400 flex items-center gap-1"
+            className="btn-control h-8 px-2 text-[9px] font-mono tracking-wider uppercase text-surface-500 flex items-center gap-1"
           >
             <ArrowUpDown size={12} />
             {sortLabels[sortBy]}
             <ChevronDown size={10} />
           </button>
           {showSortMenu && (
-            <div className="absolute right-0 top-full mt-1 z-20 bg-surface-800 border border-surface-700/50 rounded-xl shadow-lg py-1 min-w-[80px]">
+            <div className="absolute right-0 top-full mt-1 z-20 bg-surface-900 border border-surface-700/40 rounded-lg shadow-lg py-1 min-w-[80px]">
               {(["memory", "cpu", "name", "pid"] as SortBy[]).map((s) => (
                 <button
                   key={s}
@@ -266,10 +266,10 @@ export default function ProcessManager() {
                     setSortBy(s);
                     setShowSortMenu(false);
                   }}
-                  className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
+                  className={`w-full text-left px-3 py-1.5 text-[10px] font-mono tracking-wider transition-colors ${
                     sortBy === s
-                      ? "text-accent bg-accent/10"
-                      : "text-surface-300 hover:bg-surface-700/50"
+                      ? "text-accent bg-accent/8"
+                      : "text-surface-400 hover:bg-surface-700/40"
                   }`}
                 >
                   {sortLabels[s]}
@@ -294,29 +294,29 @@ export default function ProcessManager() {
           processes.map((proc) => (
             <div
               key={proc.pid}
-              className="flex items-center gap-2 bg-surface-800/50 border border-surface-700/20 rounded-lg px-3 py-2 group"
+              className="flex items-center gap-2 bg-surface-900/60 border border-surface-700/20 rounded px-2.5 py-1.5 group"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-medium text-surface-200 truncate">
+                  <span className="text-[11px] font-mono font-medium text-surface-300 truncate">
                     {proc.name}
                   </span>
-                  <span className="text-[10px] text-surface-500">
+                  <span className="text-[9px] text-surface-600 font-mono">
                     #{proc.pid}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 mt-0.5">
-                  <span className="text-[10px] text-blue-400">
+                  <span className="text-[9px] text-accent font-mono">
                     CPU {proc.cpu_percent}%
                   </span>
-                  <span className="text-[10px] text-purple-400">
+                  <span className="text-[9px] text-purple-400 font-mono">
                     {proc.memory_mb}MB
                   </span>
                   <span
-                    className={`text-[10px] ${
+                    className={`text-[9px] font-mono ${
                       proc.status === "running"
-                        ? "text-emerald-400"
-                        : "text-surface-500"
+                        ? "text-accent/60"
+                        : "text-surface-600"
                     }`}
                   >
                     {proc.status}
@@ -329,7 +329,7 @@ export default function ProcessManager() {
                   onClick={() => fetchDetail(proc.pid)}
                   title="Details"
                   aria-label={`Details for ${proc.name}`}
-                  className="p-1.5 rounded-lg text-surface-500 hover:text-surface-200 hover:bg-surface-700/50 transition-colors"
+                  className="p-1 rounded text-surface-600 hover:text-surface-300 hover:bg-surface-700/40 transition-colors"
                 >
                   <Info size={13} />
                 </button>
@@ -338,7 +338,7 @@ export default function ProcessManager() {
                   disabled={killing === proc.pid}
                   title="Terminate"
                   aria-label={`Terminate ${proc.name}`}
-                  className="p-1.5 rounded-lg text-red-400/60 hover:text-red-400 hover:bg-red-400/10 transition-colors disabled:opacity-30"
+                  className="p-1 rounded text-danger/50 hover:text-danger hover:bg-danger/8 transition-colors disabled:opacity-30"
                 >
                   {killing === proc.pid ? (
                     <Loader2 size={13} className="animate-spin" />
@@ -355,10 +355,10 @@ export default function ProcessManager() {
       {/* Detail modal */}
       {detail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-surface-800 border border-surface-700/50 rounded-2xl p-4 max-w-sm w-full max-h-[70vh] overflow-y-auto">
+          <div className="bg-surface-900 border border-surface-700/40 rounded-lg p-4 max-w-sm w-full max-h-[70vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-surface-200">
-                Process Detail
+              <h3 className="text-[11px] font-mono tracking-[0.15em] uppercase text-surface-300">
+                PROC_DETAIL
               </h3>
               <button
                 onClick={() => setDetail(null)}

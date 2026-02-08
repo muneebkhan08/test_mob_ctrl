@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PC Control — Remote",
-  description: "Control your PC remotely from your phone",
+  title: "NEXUS // Remote Access",
+  description: "Advanced remote system control interface",
   manifest: "/manifest.json",
   icons: { apple: "/icon-192.png" },
 };
@@ -14,7 +14,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  themeColor: "#0f172a",
+  themeColor: "#0a0e12",
 };
 
 export default function RootLayout({

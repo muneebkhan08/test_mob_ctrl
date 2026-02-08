@@ -51,26 +51,26 @@ export default function GoogleSearch() {
   return (
     <div className="px-1 space-y-4">
       {/* ── Mode Toggle ───────────────────── */}
-      <div className="flex items-center gap-1 p-1 rounded-xl bg-surface-800/80 border border-surface-700/30">
+      <div className="flex items-center gap-1 p-0.5 rounded-lg bg-surface-900/80 border border-surface-700/30">
         <button
           onClick={() => setMode("search")}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all ${
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded text-[10px] font-mono tracking-wider uppercase transition-all ${
             mode === "search"
-              ? "bg-accent/15 text-accent border border-accent/20"
-              : "text-surface-400 border border-transparent"
+              ? "bg-accent/10 text-accent border border-accent/20 text-glow"
+              : "text-surface-500 border border-transparent"
           }`}
         >
-          <Search size={13} /> Google Search
+          <Search size={11} /> SEARCH
         </button>
         <button
           onClick={() => setMode("url")}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium transition-all ${
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded text-[10px] font-mono tracking-wider uppercase transition-all ${
             mode === "url"
-              ? "bg-accent/15 text-accent border border-accent/20"
-              : "text-surface-400 border border-transparent"
+              ? "bg-accent/10 text-accent border border-accent/20 text-glow"
+              : "text-surface-500 border border-transparent"
           }`}
         >
-          <Globe size={13} /> Open URL
+          <Globe size={11} /> URL
         </button>
       </div>
 
@@ -94,20 +94,20 @@ export default function GoogleSearch() {
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder={
             disabled
-              ? "Connect to search…"
+              ? "// awaiting link"
               : mode === "search"
-              ? "Search Google…"
-              : "Enter URL (e.g. github.com)"
+              ? "// query…"
+              : "// url (e.g. github.com)"
           }
           disabled={disabled}
-          className="w-full pl-9 pr-12 py-3 rounded-xl text-sm bg-surface-800/80 border border-surface-700/50 placeholder:text-surface-500 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all disabled:opacity-40"
+          className="w-full pl-9 pr-12 py-2.5 rounded-lg text-[11px] font-mono bg-surface-900/90 border border-surface-700/40 placeholder:text-surface-600 text-surface-200 focus:outline-none focus:border-accent/40 focus:ring-1 focus:ring-accent/15 transition-all disabled:opacity-30"
           autoComplete="off"
           autoCorrect="off"
         />
         <button
           onClick={handleSubmit}
           disabled={!query.trim() || disabled}
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg text-accent hover:bg-accent/10 transition-all disabled:opacity-30"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded text-accent hover:bg-accent/10 transition-all disabled:opacity-30"
         >
           {mode === "search" ? (
             <ArrowRight size={16} />
@@ -118,7 +118,7 @@ export default function GoogleSearch() {
       </div>
 
       {/* ── Quick Links ───────────────────── */}
-      <div className="grid grid-cols-4 gap-1.5">
+      <div className="grid grid-cols-4 gap-1">
         {[
           { label: "YouTube", url: "youtube.com" },
           { label: "GitHub", url: "github.com" },
@@ -135,7 +135,7 @@ export default function GoogleSearch() {
               if (!disabled) send("url_open", { url: link.url });
             }}
             disabled={disabled}
-            className="btn-control h-10 text-[10px] font-medium text-surface-400 disabled:opacity-30"
+            className="btn-control h-9 text-[9px] font-mono tracking-wider uppercase text-surface-500 disabled:opacity-30"
           >
             {link.label}
           </button>
@@ -145,10 +145,10 @@ export default function GoogleSearch() {
       {/* ── Recent ────────────────────────── */}
       {recent.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-[10px] font-medium text-surface-500 uppercase tracking-wider flex items-center gap-1">
-            <Clock size={10} /> Recent
+          <p className="text-[9px] font-mono text-surface-600 tracking-[0.15em] uppercase flex items-center gap-1">
+            <Clock size={9} /> RECENT
           </p>
-          <div className="space-y-1">
+          <div className="space-y-0.5">
             {recent.map((item, i) => (
               <button
                 key={`${item}-${i}`}
@@ -160,7 +160,7 @@ export default function GoogleSearch() {
                   }
                 }}
                 disabled={disabled}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-surface-400 hover:bg-surface-800/50 transition-all text-left disabled:opacity-30"
+                className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded text-[10px] font-mono text-surface-500 hover:bg-surface-800/50 hover:text-surface-400 transition-all text-left disabled:opacity-30"
               >
                 {item.includes(".") ? (
                   <Globe size={11} className="shrink-0" />
