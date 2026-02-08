@@ -11,6 +11,9 @@ import AppLauncher from "./components/AppLauncher";
 import GoogleSearch from "./components/GoogleSearch";
 import MediaVolume from "./components/MediaVolume";
 import ScreenViewer from "./components/ScreenViewer";
+import RemoteTerminal from "./components/RemoteTerminal";
+import ProcessManager from "./components/ProcessManager";
+import FileBrowser from "./components/FileBrowser";
 import {
   MousePointer2,
   Keyboard as KeyboardIcon,
@@ -37,7 +40,7 @@ const TABS: Tab[] = [
 ];
 
 // ── Sub-tabs for Tools page ─────────────────────────────────────────────────
-type ToolsSubTab = "apps" | "search" | "media";
+type ToolsSubTab = "apps" | "search" | "media" | "terminal" | "processes" | "files";
 
 // ── Inner App (needs context) ───────────────────────────────────────────────
 function AppInner() {
@@ -84,18 +87,21 @@ function AppInner() {
         {activeTab === "tools" && (
           <div className="space-y-3 h-full flex flex-col">
             {/* Sub-tab bar */}
-            <div className="flex gap-1 p-1 rounded-xl bg-surface-800/80 border border-surface-700/30 shrink-0">
+            <div className="flex gap-1 p-1 rounded-xl bg-surface-800/80 border border-surface-700/30 shrink-0 overflow-x-auto">
               {(
                 [
                   { id: "search" as ToolsSubTab, label: "Search" },
                   { id: "apps" as ToolsSubTab, label: "Apps" },
                   { id: "media" as ToolsSubTab, label: "Media" },
+                  { id: "terminal" as ToolsSubTab, label: "Shell" },
+                  { id: "processes" as ToolsSubTab, label: "Tasks" },
+                  { id: "files" as ToolsSubTab, label: "Files" },
                 ] as const
               ).map((t) => (
                 <button
                   key={t.id}
                   onClick={() => setToolsSubTab(t.id)}
-                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all whitespace-nowrap px-2 ${
                     toolsSubTab === t.id
                       ? "bg-accent/15 text-accent border border-accent/20"
                       : "text-surface-400 border border-transparent"
@@ -110,6 +116,9 @@ function AppInner() {
               {toolsSubTab === "search" && <GoogleSearch />}
               {toolsSubTab === "apps" && <AppLauncher />}
               {toolsSubTab === "media" && <MediaVolume />}
+              {toolsSubTab === "terminal" && <RemoteTerminal />}
+              {toolsSubTab === "processes" && <ProcessManager />}
+              {toolsSubTab === "files" && <FileBrowser />}
             </div>
           </div>
         )}

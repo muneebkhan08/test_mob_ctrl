@@ -33,6 +33,9 @@ from controllers.media import MediaController
 from controllers.clipboard import ClipboardController
 from controllers.system_info import SystemInfoController
 from controllers.screen import ScreenController
+from controllers.terminal import TerminalController
+from controllers.processes import ProcessController
+from controllers.filesystem import FilesystemController
 from utils.network import get_local_ip
 
 # Configure logging for WebRTC
@@ -58,6 +61,9 @@ media = MediaController()
 clipboard = ClipboardController()
 system_info = SystemInfoController()
 screen = ScreenController()
+terminal = TerminalController()
+processes = ProcessController()
+filesystem = FilesystemController()
 
 # ── Route Dispatch Table ─────────────────────────────────────────────────────
 HANDLERS = {
@@ -103,6 +109,19 @@ HANDLERS = {
     "clipboard_set": clipboard.set_text,
     # System Info
     "system_info": system_info.get_info,
+    # Terminal
+    "terminal_execute": terminal.execute,
+    "terminal_cwd": terminal.get_cwd,
+    "terminal_set_cwd": terminal.set_cwd,
+    "terminal_reset": terminal.reset,
+    # Process Manager
+    "process_list": processes.list_processes,
+    "process_kill": processes.kill_process,
+    "process_detail": processes.get_process_detail,
+    # File Browser
+    "fs_list": filesystem.list_directory,
+    "fs_drives": filesystem.get_drives,
+    "fs_info": filesystem.get_file_info,
 }
 
 
